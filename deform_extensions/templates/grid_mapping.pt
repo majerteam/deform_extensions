@@ -1,0 +1,34 @@
+<div tal:define="
+  title title|field.title;
+  description description|field.description;
+  errormsg errormsg|field.errormsg;
+  item_template item_template|field.widget.item_template;
+  childgroups python: field.widget.childgroup(field)
+"
+i18n:domain="deform"
+>
+  <div tal:condition="errormsg"
+       class="clearfix alert alert-message error">
+    <p i18n:translate="">
+       There was a problem with this section
+    </p>
+    <p>${errormsg}</p>
+  </div>
+
+  <div tal:condition="description">
+    ${description}
+  </div>
+  ${field.start_mapping()}
+    <!-- mapping -->
+  <div class="row form-row"
+       tal:repeat="childgroup childgroups"
+       i18n:domain="deform">
+       <div tal:omit-tag="" tal:repeat="child childgroup">
+         <tal:block tal:omit-tag="" tal:condition="child">
+           <div tal:replace="structure child.render_template(item_template)" />
+         </tal:block>
+       </div>
+  </div>
+      <!-- /mapping -->
+  ${field.end_mapping()}
+</div>
