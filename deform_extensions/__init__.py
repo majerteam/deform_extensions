@@ -182,7 +182,7 @@ class GridMappingWidget(TableMappingWidget):
                 )
 
             class CompanySchema(colander.Schema):
-                tab = CompanyMainInformations(i
+                tab = CompanyMainInformations(
                     widget=GridMappingWidget(grid=GRID)
                 )
 
@@ -290,6 +290,7 @@ lessc.".format(self.num_cols))
                         child = children.pop(name)
                     except KeyError:
                         warnings.warn(u"No node {0} found".format(name))
+                        child = VoidWidget(width)
                     child.width = width
 
                 else:
