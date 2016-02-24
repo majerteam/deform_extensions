@@ -20,7 +20,6 @@ from deform.i18n import _
 from translationstring import TranslationString
 from deform.compat import url_quote
 from deform.compat import string_types
-from pyramid.renderers import render
 from collections import OrderedDict
 from itertools import izip_longest
 from deform.schema import default_widget_makers as defaults
@@ -579,9 +578,11 @@ class CustomDateInputWidget(deform.widget.Widget):
                               options=self.options)
 
     def deserialize(self, field, pstruct):
-        date = pstruct.get('date', colander.null)
-        if date in ('', colander.null):
-            return colander.null
+        date = colander.null
+        if pstruct and hasattr(pstruct, 'get'):
+            date = pstruct.get('date', colander.null)
+            if date == "":
+                date = colander.null
         return date
 
 
@@ -657,10 +658,14 @@ class CustomDateTimeInputWidget(CustomDateInputWidget):
             options=options)
 
     def deserialize(self, field, pstruct):
-        datetime_data = pstruct.get('datetime', colander.null)
+        datetime_data = ''
+        if pstruct and hasattr(pstruct, 'get'):
+            datetime_data = pstruct.get('datetime', colander.null)
+
         if datetime_data in ('', colander.null):
             return colander.null
-        return datetime_data.replace(self.options['separator'], 'T')
+        else:
+            return datetime_data.replace(self.options['separator'], 'T')
 
 
 class CustomChosenOptGroupWidget(deform.widget.SelectWidget):
@@ -682,9 +687,11 @@ class CustomSequenceWidget(deform.widget.SequenceWidget):
         # we clone the item field to bump the oid (for easier
         # automated testing; finding last node)
         item_field = field.children[0].clone()
-        proto = field.renderer(self.item_template, field=item_field,
-                            cstruct=item_field.schema.serialize(colander.null),
-                                                             parent=field)
+        proto = field.renderer(
+            self.item_template,
+            field=item_field,
+            cstruct=item_field.schema.serialize(colander.null),
+            parent=field)
         if isinstance(proto, string_types):
             proto = proto.encode('utf-8')
         proto = url_quote(proto)
@@ -709,7 +716,7 @@ class CustomSequenceWidget(deform.widget.SequenceWidget):
 
         if self.min_len is not None and (cstructlen < self.min_len):
             cstruct = list(cstruct) + \
-                    ([colander.null] * (self.min_len - cstructlen))
+                ([colander.null] * (self.min_len - cstructlen))
 
         item_field = field.children[0]
 
