@@ -636,7 +636,6 @@ class CustomDateTimeInputWidget(CustomDateInputWidget):
                        ('separator', ' '))
 
     def serialize(self, field, cstruct, readonly=False):
-        print("Cstruct : %s" % cstruct)
         if cstruct in (colander.null, None):
             cstruct = ''
         if cstruct:

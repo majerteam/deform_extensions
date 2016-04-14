@@ -33,6 +33,10 @@
      ('%s-%s' % (errstr, repeat.msg.index))"
      class="${error_class}"
      i18n:translate="">${msg}</p>
+    <p tal:condition="field.description and not field.widget.hidden"
+      class="help-block" >
+      ${field.description}
+    </p>
 
   <!-- /mapping_item -->
 
