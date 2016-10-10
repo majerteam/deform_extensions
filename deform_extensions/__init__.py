@@ -481,10 +481,11 @@ class AccordionFormWidget(GridFormWidget):
         grids = getattr(self, "grids", {})
         named_grids = getattr(self, 'named_grids', {})
 
-        if grids is not {}:
+        if grids != {}:
             method = self._childgroup
-        elif named_grids is not {}:
+        elif named_grids != {}:
             method = self._childgroup_by_name
+            grids = named_grids
         else:
             warnings.warn(u"Missing both grids and named_grids argument")
 
