@@ -112,9 +112,9 @@ class VoidWidget(object):
 
     def render_template(self, template):
         """
-        Return a div of class span<width>
+        Return a div of class col-md-<width>
         """
-        return u"<div class='span{0}'><br /></div>".format(self.width)
+        return u"<div class='col-md-{0}'><br /></div>".format(self.width)
 
 
 class TableMappingWidget(deform.widget.MappingWidget):
