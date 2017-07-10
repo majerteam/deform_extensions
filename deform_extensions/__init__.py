@@ -14,6 +14,7 @@ import warnings
 import colander
 import deform
 import random
+import fanstatic
 from string import lowercase
 
 from deform.i18n import _
@@ -23,6 +24,8 @@ from deform.compat import string_types
 from collections import OrderedDict
 from itertools import izip_longest
 from deform.schema import default_widget_makers as defaults
+from js.jquery_timepicker_addon import timepicker_js
+from js.jqueryui import bootstrap as jqueryui_bootstrap_theme
 
 
 TEMPLATES_PATH = "deform_extensions:templates/"
@@ -559,6 +562,7 @@ class CustomDateInputWidget(deform.widget.Widget):
     requirements = (
         ('modernizr', None),
         ('jqueryui', None),
+        ('custom_dates', None),
     )
     default_options = (('dateFormat', 'dd/mm/yy'),)
 
@@ -629,6 +633,7 @@ class CustomDateTimeInputWidget(CustomDateInputWidget):
         ('modernizr', None),
         ('jqueryui', None),
         ('datetimepicker', None),
+        ('custom_dates', None),
         )
 
     # separator is only used for display purpose
@@ -754,6 +759,14 @@ class CustomSequenceWidget(deform.widget.SequenceWidget):
                               add_subitem_text=add_subitem_text)
 
 
+library = fanstatic.Library('deform_extensions', 'resources')
+custom_dates = fanstatic.Resource(
+    library,
+    'date.js',
+    depends=[timepicker_js, jqueryui_bootstrap_theme]
+)
+
+
 def add_resources_to_registry():
     """
     Add resources to the deform registry
@@ -762,6 +775,7 @@ def add_resources_to_registry():
 
     default_resource_registry.set_js_resources("jqueryui", None, None)
     default_resource_registry.set_js_resources("datetimepicker", None, None)
+    default_resource_registry.set_js_resources("custom_dates", None, None)
 
     from js.deform import resource_mapping
     # fix missing resource
@@ -770,6 +784,8 @@ def add_resources_to_registry():
     # add the datetimepicker
     from js.jquery_timepicker_addon import timepicker
     resource_mapping['datetimepicker'] = timepicker
+
+    resource_mapping['custom_dates'] = custom_dates
 
 
 def set_default_widgets():
