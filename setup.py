@@ -19,7 +19,9 @@ setup(
     url='https://github.com/majerteam/deform_extensions',
     author='Gaston Tjebbes - Majerti',
     author_email='tech@majerti.fr',
-    install_requires=['deform', 'js.deform', 'js.jquery_timepicker_addon'],
+    install_requires=[
+        'deform', 'js.deform', 'js.jquery_timepicker_addon', 'js.jqueryui'
+    ],
     extra_requires={'docs': ['sphinx'], 'test':['pytest']},
     classifiers=[
         'Environment :: Web Environment',
@@ -32,4 +34,9 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
+    entry_points={
+        'fanstatic.libraries': [
+            'deform_extensions = deform_extensions:library',
+        ],
+    },
 )
