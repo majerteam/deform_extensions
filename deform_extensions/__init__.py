@@ -449,7 +449,7 @@ class AccordionFormWidget(GridFormWidget):
 
         schema = SQLAlchemySchemaNode(Model)
         form = Form(schema)
-        form.widget = AccordionMappingWidget()
+        form.widget = AccordionFormWidget()
     """
     num_cols = 12
     template = TEMPLATES_PATH + "accordion_form.pt"
