@@ -24,7 +24,16 @@
                         id="req-${oid}">*</span>
   </label>
 
-  <span tal:replace="structure field.serialize(cstruct)"/>
+  <div tal:define="input_prepend field.widget.input_prepend | None;
+                   input_append field.widget.input_append  | None"
+       tal:omit-tag="not (input_prepend or input_append)"
+       class="input-group">
+    <span class="input-group-addon"
+          tal:condition="input_prepend">${input_prepend}</span
+    ><span tal:replace="structure field.serialize(cstruct).strip()"
+    /><span class="input-group-addon"
+            tal:condition="input_append">${input_append}</span>
+  </div>
 
   <p tal:condition="field.error and not hidden and not field.typ.__class__.__name__=='Mapping'"
      tal:define="errstr 'error-%s' % oid"
