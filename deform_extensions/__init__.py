@@ -769,12 +769,16 @@ class RadioChoiceToggleWidget(deform.widget.RadioChoiceWidget):
     **Attributes/Arguments**
 
     values
-        A sequence of two-tuples (the first value must be of type
+        A sequence of three-tuples (the first value must be of type
         string, unicode or integer, the second value must be string or
         unicode) indicating allowable, displayed values, e.g. ``(
-        ('true', 'True'), ('false', 'False') )``.  The first element
-        in the tuple is the value that is used to find the form item that will
-        be shown when the radio is checked.  The second is the display value.
+        ('true', 'True', 'otherformelement1'), ('false', 'False',
+        'otherformelement2') )``.
+        The first element is the value that will be submitted by the form
+        The second is the display value.
+        The third element in the tuple is the colande name of the form item that
+        will be shown when the radio is checked if the void string '' is
+        provided, only all other elements will be hidden.
 
     template
         The template name used to render the widget.  Default:
@@ -796,6 +800,16 @@ class RadioChoiceToggleWidget(deform.widget.RadioChoiceWidget):
     requirements = (
         ('radio_choice_toggle', None),
     )
+
+    def serialize(self, field, cstruct, **kw):
+        if cstruct in (colander.null, None):
+            cstruct = self.null_value
+        readonly = kw.get('readonly', self.readonly)
+        values = kw.get('values', self.values)
+        template = readonly and self.readonly_template or self.template
+        kw['values'] = values
+        tmpl_values = self.get_template_values(field, cstruct, kw)
+        return field.renderer(template, **tmpl_values)
 
 
 library = fanstatic.Library('deform_extensions', 'resources')

@@ -8,7 +8,7 @@
        tal:omit-tag="inline"
        class="radio">
     <label for="${oid}-${repeat.choice.index}"
-           tal:define="(value, title) choice"
+           tal:define="(value, title, targetkey) choice"
            tal:attributes="class inline and 'radio-inline'">
       <input tal:attributes="checked value == cstruct;
                              class css_class;
@@ -16,6 +16,7 @@
              type="radio"
              name="${oid}"
              value="${value}"
+             data-target="${targetkey}"
              id="${oid}-${repeat.choice.index}"/>
       ${title}
     </label>
