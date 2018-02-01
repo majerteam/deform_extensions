@@ -24,6 +24,8 @@ from deform.compat import string_types
 from collections import OrderedDict
 from itertools import izip_longest
 from deform.schema import default_widget_makers as defaults
+from js.jquery import jquery
+
 from js.jquery_timepicker_addon import timepicker_js
 from js.jqueryui import bootstrap as jqueryui_bootstrap_theme
 
@@ -759,11 +761,53 @@ class CustomSequenceWidget(deform.widget.SequenceWidget):
                               add_subitem_text=add_subitem_text)
 
 
+class RadioChoiceToggleWidget(deform.widget.RadioChoiceWidget):
+    """
+    Renders a sequence of ``<input type="radio"/>`` buttons based on a
+    predefined set of values.
+
+    **Attributes/Arguments**
+
+    values
+        A sequence of two-tuples (the first value must be of type
+        string, unicode or integer, the second value must be string or
+        unicode) indicating allowable, displayed values, e.g. ``(
+        ('true', 'True'), ('false', 'False') )``.  The first element
+        in the tuple is the value that is used to find the form item that will
+        be shown when the radio is checked.  The second is the display value.
+
+    template
+        The template name used to render the widget.  Default:
+        ``radio_choice_toggle``.
+
+    null_value
+        The value used to replace the ``colander.null`` value when it
+        is passed to the ``serialize`` or ``deserialize`` method.
+        Default: the empty string.
+
+    inline
+        If true, choices will be rendered on a single line.
+        Otherwise choices will be rendered one per line.
+        Default: false.
+    """
+    template = TEMPLATES_PATH + "radio_choice_toggle.pt"
+    readonly_template = TEMPLATES_PATH + "radio_choice_toggle.pt"
+    values = ()
+    requirements = (
+        ('radio_choice_toggle', None),
+    )
+
+
 library = fanstatic.Library('deform_extensions', 'resources')
 custom_dates = fanstatic.Resource(
     library,
     'date.js',
     depends=[timepicker_js, jqueryui_bootstrap_theme]
+)
+radio_choice_toggle = fanstatic.Resource(
+    library,
+    'radio_choice_toggle.js',
+    depends=[jquery]
 )
 
 
@@ -776,6 +820,9 @@ def add_resources_to_registry():
     default_resource_registry.set_js_resources("jqueryui", None, None)
     default_resource_registry.set_js_resources("datetimepicker", None, None)
     default_resource_registry.set_js_resources("custom_dates", None, None)
+    default_resource_registry.set_js_resources(
+        "radio_choice_toggle", None, None
+    )
 
     from js.deform import resource_mapping
     # fix missing resource
@@ -786,6 +833,7 @@ def add_resources_to_registry():
     resource_mapping['datetimepicker'] = timepicker
 
     resource_mapping['custom_dates'] = custom_dates
+    resource_mapping['radio_choice_toggle'] = radio_choice_toggle
 
 
 def set_default_widgets():
