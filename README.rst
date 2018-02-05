@@ -12,6 +12,14 @@ This package provides custom widgets and form layout widgets.
 It aims to extend deform 2 and replaces the former deform_bootstrap_extensions
 (that was dedicated to deform_bootstrap and deform 0.* serie)
 
+Install
+-------
+
+.. code-block:: console
+
+    pip install deform_extensions
+
+
 Custom widgets
 --------------
 
@@ -58,3 +66,11 @@ Layout tools:
 
 
 See __init__.py source code for some docs or ping me on Freenode @tonthon
+
+Run tests
+----------
+
+.. code-block:: console
+
+    pip install pytest
+    py.test -xv
