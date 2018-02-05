@@ -2,6 +2,11 @@
 Deform extension tools
 ================================
 
+.. image::
+    https://secure.travis-ci.org/majerteam/deform_extensions.png?branch=master
+   :target: http://travis-ci.org/majerteam/deform_extensions
+   :alt: Travis-ci: continuous integration status.
+
 This package provides custom widgets and form layout widgets.
 
 It aims to extend deform 2 and replaces the former deform_bootstrap_extensions
