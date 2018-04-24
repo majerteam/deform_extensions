@@ -21,6 +21,7 @@ from collections import OrderedDict
 from itertools import izip_longest
 from deform.schema import default_widget_makers as defaults
 from js.jquery import jquery
+from js.underscore import underscore
 
 from js.jquery_timepicker_addon import timepicker_js
 from js.jqueryui import bootstrap as jqueryui_bootstrap_theme
@@ -722,6 +723,53 @@ class RadioChoiceToggleWidget(deform.widget.RadioChoiceWidget):
         return field.renderer(template, **tmpl_values)
 
 
+class CheckboxToggleWidget(deform.widget.CheckboxWidget):
+    """
+    Renders an ``<input type="checkbox"/>`` widget.
+
+    **Attributes/Arguments**
+
+    true_val
+        The value which should be returned during deserialization if
+        the box is checked.  Default: ``true``.
+
+    false_val
+        The value which should be returned during deserialization if
+        the box was left unchecked.  Default: ``false``.
+
+    template
+        The template name used to render the widget.  Default:
+        ``checkbox``.
+
+    readonly_template
+        The template name used to render the widget in read-only mode.
+        Default: ``readonly/checkbox``.
+
+    true_target
+
+        The item that should be displayed on true value
+
+    false_target
+
+        The item that should be displayed on false value
+    """
+    template = TEMPLATES_PATH + "checkbox_toggle.pt"
+    readonly_template = TEMPLATES_PATH + "checkbox_toggle.pt"
+    true_val = 'true'
+    false_val = 'false'
+    true_target = ""
+    false_target = ""
+    requirements = (
+        ('checkbox_toggle', None),
+    )
+
+    def serialize(self, field, cstruct, **kw):
+        readonly = kw.get('readonly', self.readonly)
+        template = readonly and self.readonly_template or self.template
+        values = self.get_template_values(field, cstruct, kw)
+        return field.renderer(template, **values)
+
+
 library = fanstatic.Library('deform_extensions', 'resources')
 custom_dates = fanstatic.Resource(
     library,
@@ -731,7 +779,12 @@ custom_dates = fanstatic.Resource(
 radio_choice_toggle = fanstatic.Resource(
     library,
     'radio_choice_toggle.js',
-    depends=[jquery]
+    depends=[jquery, underscore]
+)
+checkbox_toggle = fanstatic.Resource(
+    library,
+    'checkbox_toggle.js',
+    depends=[jquery, underscore]
 )
 
 
@@ -747,6 +800,7 @@ def add_resources_to_registry():
     default_resource_registry.set_js_resources(
         "radio_choice_toggle", None, None
     )
+    default_resource_registry.set_js_resources("checkbox_toggle", None, None)
 
     from js.deform import resource_mapping
     # fix missing resource
@@ -758,6 +812,7 @@ def add_resources_to_registry():
 
     resource_mapping['custom_dates'] = custom_dates
     resource_mapping['radio_choice_toggle'] = radio_choice_toggle
+    resource_mapping['checkbox_toggle'] = checkbox_toggle
 
 
 def set_default_widgets():

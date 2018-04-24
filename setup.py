@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='deform_extensions',
-    version='0.3.1',
+    version='0.3.2',
     packages=['deform_extensions'],
     include_package_data=True,
     license='GPLv3',
@@ -20,7 +20,8 @@ setup(
     author='Gaston Tjebbes - Majerti',
     author_email='tech@majerti.fr',
     install_requires=[
-        'deform', 'js.deform', 'js.jquery_timepicker_addon', 'js.jqueryui'
+        'deform', 'js.deform', 'js.jquery_timepicker_addon', 'js.jqueryui',
+        'js.underscore',
     ],
     extra_requires={'docs': ['sphinx'], 'test':['pytest']},
     classifiers=[
