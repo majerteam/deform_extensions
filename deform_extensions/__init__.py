@@ -277,6 +277,7 @@ match the number of children of our mapping widget")
 
         for row in grid:
             child_row = []
+            row_is_void = True
             width_sum = 0
             for name, width in row:
                 width_sum += width
@@ -289,6 +290,7 @@ lessc.".format(self.num_cols))
                 if name is not None:
                     try:
                         child = children.pop(name)
+                        row_is_void = False
                     except KeyError:
                         warnings.warn(u"No node {0} found".format(name))
                         child = VoidWidget(width)
@@ -298,7 +300,7 @@ lessc.".format(self.num_cols))
                     child = VoidWidget(width)
                 child_row.append(child)
 
-            if child_row != []:
+            if not row_is_void:
                 result.append(child_row)
 
         # Add the field not configured in the grid
