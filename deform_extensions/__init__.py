@@ -174,6 +174,7 @@ class GridMappingWidget(TableMappingWidget):
     should be composed of two dimensionnal vectors (name, width).
 
 
+
     .. code-block:: python
 
         class CompanyMainInformations(colander.MappingSchema):

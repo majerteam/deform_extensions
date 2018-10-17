@@ -1,7 +1,7 @@
-deform_bootstrap_extensions
+deform_extensions
 ===========================
 
 .. toctree::
    :maxdepth: 4
 
-   deform_bootstrap_extensions
+   deform_extensions

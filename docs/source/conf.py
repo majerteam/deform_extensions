@@ -200,7 +200,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'deform_extensions.tex', u'deform\\_bootstrap\\_extensions Documentation',
+  ('index', 'deform_extensions.tex', u'deform\\_extensions Documentation',
    u'Gaston Tjebbes - Majerti', 'manual'),
 ]
 

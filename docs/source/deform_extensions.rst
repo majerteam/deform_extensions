@@ -1,4 +1,4 @@
-deform_bootstrap_extensions package
+deform_extensions package
 ===================================
 
 Module contents
