@@ -105,7 +105,7 @@ class InlineMappingSchema(colander.MappingSchema):
     widget = InlineMappingWidget()
 
 
-class VoidWidget(object):
+class VoidWidget(deform.widget.Widget):
     """
     Void widget used to fill our grid
     """
@@ -117,6 +117,24 @@ class VoidWidget(object):
         Return a div of class col-md-<width>
         """
         return u"<div class='col-md-{0}'><br /></div>".format(self.width)
+
+
+class StaticWidget(deform.widget.Widget):
+    """
+    Static widget used to insert static html in grids
+    """
+    def __init__(self, html_str, width=1):
+        self.width = width
+        self.html_str = html_str
+
+    def render_template(self, template):
+        """
+        Return a div of class col-md-<width>
+        """
+        return u"<div class='col-md-{0}'>{1}</div>".format(
+            self.width,
+            self.html_str
+        )
 
 
 class TableMappingWidget(deform.widget.MappingWidget):
@@ -177,30 +195,52 @@ class GridMappingWidget(TableMappingWidget):
                 title=u"Latitude",
             )
 
-            GRID = (
-                ((3, True), ),
-                ((6, True), (2, False), (2, True), (2, True)),
-                )
+        GRID = (
+            ((3, True), ),
+            ((6, True), (2, False), (2, True), (2, True)),
+            )
 
-            class CompanySchema(colander.Schema):
-                tab = CompanyMainInformations(
-                    widget=GridMappingWidget(grid=GRID)
-                )
+        class CompanySchema(colander.Schema):
+            tab = CompanyMainInformations(
+                widget=GridMappingWidget(grid=GRID)
+            )
 
-            NAMED_GRID = (
-                (('title', 3), ),
-                (('address', 6), (None, 2), ('lon_coord', 2), ('lat_coord', 2)),
-                )
+        NAMED_GRID = (
+            (('title', 3), ),
+            (('address', 6), (None, 2), ('lon_coord', 2), ('lat_coord', 2)),
+            )
 
-            class CompanySchema(colander.Schema):
-                tab = CompanyMainInformations(
-                    widget=GridMappingWidget(named_grid=NAMED_GRID)
-                    )
+        class CompanySchema(colander.Schema):
+            tab = CompanyMainInformations(
+                widget=GridMappingWidget(named_grid=NAMED_GRID)
+                )
 
 
     Here, in both cases, we've got a two lines grid with 1 element on the first
     line and 3 on the second one. The second element of the second line will be
     a void cell of 2 units width
+
+    You can also pass StaticWidget instances in both cases
+    This way static html datas can be inserted in forms
+
+    .. code-block:: python
+
+        NAMED_GRID = (
+            (('title', 3), ),
+            (
+                (StaticWidget("<div>Hello</div>"), 6),
+                (None, 2), ('lon_coord', 2), ('lat_coord', 2)
+             ),
+        )
+
+        GRID = (
+            ((3, True), ),
+            (
+                (6, StaticWidget("<div>Hello</div>")),
+                (2, False), (2, True), (2, True)
+            ),
+        )
+
     """
 
     # The default bootstrap layout contains 12 columns
@@ -230,7 +270,11 @@ the bootstrap layout columns number. One of your lines is larger than {0}. \
 You can increase this column number by compiling bootstrap css with \
 lessc.".format(self.num_cols))
 
-                if filled:
+                if isinstance(filled, StaticWidget):
+                    child = filled
+                    child.width = width
+
+                elif filled:
                     try:
                         child = children[index]
                     except IndexError:
@@ -287,7 +331,11 @@ the bootstrap layout columns number. One of your lines is larger than {0}. \
 You can increase this column number by compiling bootstrap css with \
 lessc.".format(self.num_cols))
 
-                if name is not None:
+                if isinstance(name, StaticWidget):
+                    child = name
+                    child.width = width
+                    row_is_void = False
+                elif name is not None:
                     try:
                         child = children.pop(name)
                         row_is_void = False

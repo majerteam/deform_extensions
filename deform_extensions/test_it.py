@@ -42,6 +42,42 @@ def test_grid_childgroup_by_name():
     assert len(childgroups[1]) == 4
 
 
+def test_test_grid_childgroup_by_name_void_row():
+    from deform_extensions import GridMappingWidget
+    NAMED_GRID = (
+        (('title', 3), ),
+        (('unexisting', 6),)
+    )
+    children = [
+        Dummy(name="title", widget=None),
+    ]
+
+    mapping = GridMappingWidget(named_grid=NAMED_GRID)
+
+    childgroups = mapping._childgroup_by_name(children, NAMED_GRID)
+    assert childgroups[0][0].name == "title"
+    assert len(childgroups) == 1
+
+
+def test_test_grid_childgroup_by_name_static_widget():
+    from deform_extensions import GridMappingWidget, StaticWidget
+
+    NAMED_GRID = (
+        (('title', 3), ),
+        ((StaticWidget("hello world"), 6),)
+    )
+    children = [
+        Dummy(name="title", widget=None),
+    ]
+
+    mapping = GridMappingWidget(named_grid=NAMED_GRID)
+
+    childgroups = mapping._childgroup_by_name(children, NAMED_GRID)
+    assert childgroups[0][0].name == "title"
+    assert len(childgroups) == 2
+    assert isinstance(childgroups[1][0], StaticWidget)
+
+
 def test_grid_childgroup():
     from deform_extensions import GridMappingWidget, VoidWidget
 
