@@ -66,7 +66,7 @@ class DisabledInput(deform.widget.Widget):
     """
         A non editable input
     """
-    template = TEMPLATES_PATH + "disabledinput.pt"
+    template = "disabledinput.pt"
 
     def serialize(self, field, cstruct=None, readonly=True):
         if cstruct is colander.null:
@@ -91,10 +91,10 @@ class InlineMappingWidget(deform.widget.MappingWidget):
     """
     The custom widget we use to render our mapping
     """
-    template = TEMPLATES_PATH + "inline_mapping.pt"
-    item_template = TEMPLATES_PATH + "inline_mapping_item.pt"
-    readonly_template = TEMPLATES_PATH + "inline_mapping.pt"
-    readonly_item_template = TEMPLATES_PATH + "inline_mapping_item.pt"
+    template = "inline_mapping.pt"
+    item_template = "inline_mapping_item.pt"
+    readonly_template = "inline_mapping.pt"
+    readonly_item_template = "inline_mapping_item.pt"
 
 
 class InlineMappingSchema(colander.MappingSchema):
@@ -145,10 +145,10 @@ class TableMappingWidget(deform.widget.MappingWidget):
     """
     default_cols = 3
     num_cols = 12
-    template = TEMPLATES_PATH + "grid_mapping.pt"
-    item_template = TEMPLATES_PATH + "grid_mapping_item.pt"
-    readonly_template = TEMPLATES_PATH + "grid_mapping.pt"
-    readonly_item_template = TEMPLATES_PATH + "grid_mapping_item.pt"
+    template = "grid_mapping.pt"
+    item_template = "grid_mapping_item.pt"
+    readonly_template = "grid_mapping.pt"
+    readonly_item_template = "grid_mapping_item.pt"
 
     def childgroup(self, field):
         """
@@ -394,8 +394,8 @@ class AccordionMappingWidget(GridMappingWidget):
 
     Form(schema=Schema(), bootstrap_form_style='form-grid')
     """
-    template = TEMPLATES_PATH + "accordion_mapping.pt"
-    readonly_template = TEMPLATES_PATH + "accordion_mapping.pt"
+    template = "accordion_mapping.pt"
+    readonly_template = "accordion_mapping.pt"
 
     @property
     def tag_id(self):
@@ -408,8 +408,8 @@ class AccordionMappingWidget(GridMappingWidget):
 
 
 class TableFormWidget(TableMappingWidget):
-    template = TEMPLATES_PATH + "grid_form.pt"
-    readonly_template = TEMPLATES_PATH + "grid_form.pt"
+    template = "grid_form.pt"
+    readonly_template = "grid_form.pt"
 
 
 class GridFormWidget(GridMappingWidget):
@@ -440,8 +440,8 @@ class GridFormWidget(GridMappingWidget):
         Here you need to set the widget after you initialize the form object
 
     """
-    template = TEMPLATES_PATH + "grid_form.pt"
-    readonly_template = TEMPLATES_PATH + "grid_form.pt"
+    template = "grid_form.pt"
+    readonly_template = "grid_form.pt"
 
 
 class AccordionFormWidget(GridFormWidget):
@@ -502,8 +502,8 @@ class AccordionFormWidget(GridFormWidget):
         form.widget = AccordionFormWidget()
     """
     num_cols = 12
-    template = TEMPLATES_PATH + "accordion_form.pt"
-    readonly_template = TEMPLATES_PATH + "accordion_form.pt"
+    template = "accordion_form.pt"
+    readonly_template = "accordion_form.pt"
     default_item_template = deform.widget.MappingWidget.item_template
 
     def accordions(self, form):
@@ -568,16 +568,16 @@ class LocalizationWidget(deform.widget.TextInputWidget):
         ...     lat_coord = colander.Schema(colander.Float())
         ...     lon_coord = colander.Schema(colander.Float(), widget=widget)
     """
-    template = TEMPLATES_PATH + "localization.pt"
-    readonly_template = TEMPLATES_PATH + "localization.pt"
+    template = "localization.pt"
+    readonly_template = "localization.pt"
 
 
 class HiddenLocalizationWidget(deform.widget.TextInputWidget):
     """
     A hidden version
     """
-    template = TEMPLATES_PATH + "hidden_localization.pt"
-    readonly_template = TEMPLATES_PATH + "hidden_localization.pt"
+    template = "hidden_localization.pt"
+    readonly_template = "hidden_localization.pt"
 
 
 class CustomDateInputWidget(deform.widget.Widget):
@@ -606,7 +606,7 @@ class CustomDateInputWidget(deform.widget.Widget):
         The template name used to render the widget in read-only mode.
         Default: ``readonly/textinput``.
     """
-    template = TEMPLATES_PATH + 'dateinput.pt'
+    template = 'dateinput.pt'
     readonly_template = 'readonly/textinput.pt'
     size = None
     requirements = (
@@ -674,7 +674,7 @@ class CustomDateTimeInputWidget(CustomDateInputWidget):
         The template name used to render the widget in read-only mode.
         Default: ``readonly/textinput``.
     """
-    template = TEMPLATES_PATH + 'datetimeinput.pt'
+    template = 'datetimeinput.pt'
     readonly_template = 'readonly/textinput.pt'
     type_name = 'datetime'
     size = None
@@ -756,8 +756,8 @@ class RadioChoiceToggleWidget(deform.widget.RadioChoiceWidget):
         Otherwise choices will be rendered one per line.
         Default: false.
     """
-    template = TEMPLATES_PATH + "radio_choice_toggle.pt"
-    readonly_template = TEMPLATES_PATH + "radio_choice_toggle.pt"
+    template = "radio_choice_toggle.pt"
+    readonly_template = "radio_choice_toggle.pt"
     values = ()
     requirements = (
         ('radio_choice_toggle', None),
@@ -804,8 +804,8 @@ class CheckboxToggleWidget(deform.widget.CheckboxWidget):
 
         The item that should be displayed on false value
     """
-    template = TEMPLATES_PATH + "checkbox_toggle.pt"
-    readonly_template = TEMPLATES_PATH + "checkbox_toggle.pt"
+    template = "checkbox_toggle.pt"
+    readonly_template = "checkbox_toggle.pt"
     true_val = 'true'
     false_val = 'false'
     true_target = ""
@@ -874,6 +874,13 @@ def set_default_widgets():
     defaults[colander.Date] = CustomDateInputWidget
 
 
+def add_template_path():
+    """
+    Set the template path in the renderer's lookup informations
+    """
+    deform.renderer.configure_zpt_renderer(["deform_extensions:templates"])
+
 def includeme(config):
     add_resources_to_registry()
     set_default_widgets()
+    add_template_path()
