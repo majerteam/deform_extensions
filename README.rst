@@ -2,6 +2,8 @@
 Deform extension tools
 ================================
 
+Note : since version 0.4 deform_extensions is now compatible with python 3
+
 .. image::
     https://secure.travis-ci.org/majerteam/deform_extensions.png?branch=master
    :target: http://travis-ci.org/majerteam/deform_extensions
@@ -72,5 +74,5 @@ Run tests
 
 .. code-block:: console
 
-    pip install pytest
+    pip3 install pytest
     py.test -xv

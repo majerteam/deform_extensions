@@ -15,10 +15,10 @@ import colander
 import deform
 import random
 import fanstatic
-from string import lowercase
+from string import ascii_lowercase
 
 from collections import OrderedDict
-from itertools import izip_longest
+from itertools import zip_longest
 from deform.schema import default_widget_makers as defaults
 from js.jquery import jquery
 from js.underscore import underscore
@@ -38,7 +38,7 @@ def gen_random_string(size=15):
 
             size of the resulting string
     """
-    return ''.join(random.choice(lowercase) for _ in range(size))
+    return ''.join(random.choice(ascii_lowercase) for _ in range(size))
 
 
 def random_tag_id(size=15):
@@ -59,7 +59,7 @@ def grouper(iterable, items, fillvalue=None):
     Got it from https://docs.python.org/2/library/itertools.html#recipes
     """
     args = [iter(iterable)] * items
-    return izip_longest(fillvalue=fillvalue, *args)
+    return zip_longest(fillvalue=fillvalue, *args)
 
 
 class DisabledInput(deform.widget.Widget):

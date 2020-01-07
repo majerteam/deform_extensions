@@ -76,7 +76,7 @@
           id="${accordion['tag_id']}"
           role="tabpanel" aria-labelledby="${accordion['tag_id']}-heading"
           >
-          <tal:if tal:condition="accordion.has_key('rows')">
+          <tal:if tal:condition="'rows' in accordion">
             <div class='panel-body' tal:define="
               childgroups accordion.rows
               "
@@ -94,7 +94,7 @@
               </div>
             </div>
           </tal:if>
-          <tal:if tal:condition="not accordion.has_key('rows')">
+          <tal:if tal:condition="'rows' not in accordion">
             <div class='panel-body' tal:define="
               childgroup accordion.children
               "
