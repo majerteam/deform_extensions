@@ -8,7 +8,7 @@
 Provide custom colander schemas and associated widgets to render forms
 differently
 """
-import cgi
+import html
 import json
 import warnings
 import colander
@@ -71,7 +71,7 @@ class DisabledInput(deform.widget.Widget):
     def serialize(self, field, cstruct=None, readonly=True):
         if cstruct is colander.null:
             cstruct = u''
-        quoted = cgi.escape(cstruct, quote='"')
+        quoted = html.escape(cstruct, quote='"')
         params = {'name': field.name, 'value': quoted}
         return field.renderer(self.template, **params)
 
@@ -738,8 +738,8 @@ class RadioChoiceToggleWidget(deform.widget.RadioChoiceWidget):
         'otherformelement2') )``.
         The first element is the value that will be submitted by the form
         The second is the display value.
-        The third element in the tuple is the colande name of the form item that
-        will be shown when the radio is checked if the void string '' is
+        The third element in the tuple is the colande name of the form item
+        that will be shown when the radio is checked if the void string '' is
         provided, only all other elements will be hidden.
 
     template
@@ -879,6 +879,7 @@ def add_template_path():
     Set the template path in the renderer's lookup informations
     """
     deform.renderer.configure_zpt_renderer(["deform_extensions:templates"])
+
 
 def includeme(config):
     add_resources_to_registry()
