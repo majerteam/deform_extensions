@@ -27,8 +27,6 @@ Custom widgets
 
     * LocalizationWidget : Map location
 
-    * CustomDateInputWidget : Date
-
     * CustomDateTimeInputWidget : Datetime widget
 
     * RadioToggleWidget
