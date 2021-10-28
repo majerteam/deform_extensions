@@ -580,68 +580,7 @@ class HiddenLocalizationWidget(deform.widget.TextInputWidget):
     readonly_template = "hidden_localization.pt"
 
 
-class CustomDateInputWidget(deform.widget.Widget):
-    """
-
-    Renders a JQuery UI date picker widget
-    (http://jqueryui.com/demos/datepicker/).  Most useful when the
-    schema node is a ``colander.Date`` object.
-    alt Tag is used to allow full customization of the displayed input
-
-    **Attributes/Arguments**
-
-    size
-        The size, in columns, of the text input field.  Defaults to
-        ``None``, meaning that the ``size`` is not included in the
-        widget output (uses browser default size).
-
-    template
-        The template name used to render the widget.  Default:
-        ``dateinput``.
-
-    options
-        Options for configuring the widget (eg: date format)
-
-    readonly_template
-        The template name used to render the widget in read-only mode.
-        Default: ``readonly/textinput``.
-    """
-    template = 'dateinput.pt'
-    readonly_template = 'readonly/textinput.pt'
-    size = None
-    requirements = (
-        ('modernizr', None),
-        ('jqueryui', None),
-        ('custom_dates', None),
-    )
-    default_options = (('dateFormat', 'dd/mm/yy'),)
-
-    def __init__(self, *args, **kwargs):
-        self.options = dict(self.default_options)
-        deform.widget.Widget.__init__(self, *args, **kwargs)
-
-    def serialize(self, field, cstruct, readonly=False):
-        if cstruct in (colander.null, None):
-            cstruct = ''
-        template = readonly and self.readonly_template or self.template
-        options = self.options
-        # Force iso format for colander compatibility
-        options['altFormat'] = 'yy-mm-dd'
-        return field.renderer(template,
-                              field=field,
-                              cstruct=cstruct,
-                              options=self.options)
-
-    def deserialize(self, field, pstruct):
-        date = colander.null
-        if pstruct and hasattr(pstruct, 'get'):
-            date = pstruct.get('date', colander.null)
-            if date == "":
-                date = colander.null
-        return date
-
-
-class CustomDateTimeInputWidget(CustomDateInputWidget):
+class CustomDateTimeInputWidget(deform.widget.Widget):
     """
     Renders a datetime picker widget.
 
@@ -690,6 +629,10 @@ class CustomDateTimeInputWidget(CustomDateInputWidget):
     default_options = (('dateFormat', 'dd/mm/yy'),
                        ('timeFormat', 'HH:mm'),
                        ('separator', ' '))
+
+    def __init__(self, *args, **kwargs):
+        self.options = dict(self.default_options)
+        deform.widget.Widget.__init__(self, *args, **kwargs)
 
     def serialize(self, field, cstruct, readonly=False):
         if cstruct in (colander.null, None):
@@ -871,7 +814,7 @@ def set_default_widgets():
     Set custom date and datetime input widgets for a better user-experience
     """
     defaults[colander.DateTime] = CustomDateTimeInputWidget
-    defaults[colander.Date] = CustomDateInputWidget
+    # defaults[colander.Date] = CustomDateInputWidget
 
 
 def add_template_path():
