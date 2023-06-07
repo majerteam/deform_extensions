@@ -500,11 +500,48 @@ class AccordionFormWidget(GridFormWidget):
         schema = SQLAlchemySchemaNode(Model)
         form = Form(schema)
         form.widget = AccordionFormWidget()
+
+
+    More options
+
+    fallback_down
+
+        Fields not listed in the grid description are shown top by default, show them top ?
+
+    default_open
+
+        Should the first accordion be open on start
+
+
+    Note :
+
+        This widget can also be used with mapping but a different template should be specified
+
+        AccordionFormWidget(..., template='accordions_mapping.pt')
     """
     num_cols = 12
     template = "accordion_form.pt"
     readonly_template = "accordion_form.pt"
     default_item_template = deform.widget.MappingWidget.item_template
+
+    @property
+    def tag_id(self):
+        """
+        Return a unique tag id for this mapping
+        """
+        if not hasattr(self, '_tag_id'):
+            self._tag_id = random_tag_id()
+        return self._tag_id
+
+    @property
+    def fallback_section(self):
+        import logging
+        logger = logging.getLogger("endi")
+        logger.info(getattr(self, 'fallback_down', False))
+        if getattr(self, "fallback_down", False):
+            return "down"
+        else:
+            return "top"
 
     def accordions(self, form):
         """
