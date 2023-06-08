@@ -47,7 +47,7 @@
       ${description}
     </p>
 
-    <div tal:omit-tag="" tal:condition="${field.widget.fallback_section=='top'}" tal:repeat="field external_fields">
+    <div tal:omit-tag="" tal:condition="field.widget.fallback_section=='top'" tal:repeat="field external_fields">
       <tal:block tal:omit-tag="" tal:condition="field">
         <div tal:replace="structure field.render_template(default_item_template)" />
       </tal:block>
@@ -110,7 +110,7 @@
         </div>
       </div>
     </div>
-    <div tal:omit-tag="" tal:condition="${field.widget.fallback_section=='down'}" tal:repeat="field external_fields">
+   <div tal:omit-tag="" tal:condition="field.widget.fallback_section=='down'" tal:repeat="field external_fields">
       <tal:block tal:omit-tag="" tal:condition="field">
         <div tal:replace="structure field.render_template(default_item_template)" />
       </tal:block>
