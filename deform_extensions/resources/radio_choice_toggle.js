@@ -13,8 +13,7 @@ var ToggleManager = {
         var this_ = this;
         this.ui.field.each(
             function(index, tag){
-                var target_name = $(tag).val();
-                console.log("Managing %s", target_name);
+                var target_name = $(tag).attr('data-target');
                 if (target_name && (target_name == visible_target)){
                     this_.showItem(target_name);
                 } else {
@@ -42,7 +41,6 @@ var ToggleManager = {
         this.toggle(visible_target);
     },
     setup: function(field_id){
-        console.log("Initializing togglemanager with %s", field_id);
         this.ui.field = $('input[name=' + field_id + ']');
         this.ui.form = this.ui.field.closest('form');
         this.bindEvents();
