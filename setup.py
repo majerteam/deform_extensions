@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='deform_extensions',
-    version='2026.0.0',
+    version='2026.0.1',
     packages=['deform_extensions'],
     include_package_data=True,
     license='GPLv3',

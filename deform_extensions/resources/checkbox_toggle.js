@@ -1,5 +1,4 @@
 var CheckboxToggleManager = {
-    ui: {},
     buildSelector: function(tag_name){
         if (tag_name.indexOf(',') === -1) {
             return `.item-${tag_name}`;
@@ -17,7 +16,9 @@ var CheckboxToggleManager = {
         $(selector).hide();
     },
     bindEvents: function(){
-        this.ui.field.on('change', this.onChange.bind(this));
+        this.ui.field
+            .off('change.checkboxToggle')
+            .on('change.checkboxToggle', this.onChange.bind(this));
     },
     onChange: function(event){
         /*
@@ -41,12 +42,11 @@ var CheckboxToggleManager = {
         }
     },
     setup: function(field_id, true_target, false_target){
-        console.log("Initializing checkbox togglemanager with %s %s,%s", field_id, true_target, false_target);
-        this.ui.field = $('#' + field_id);
-        this.ui.form = this.ui.field.closest('form');
-        this.bindEvents();
-        this.true_target = true_target;
-        this.false_target = false_target;
-        this.onChange();
+        var instance = Object.create(this);
+        instance.ui = { field: $('#' + field_id) };
+        instance.true_target = true_target;
+        instance.false_target = false_target;
+        instance.bindEvents();
+        instance.onChange();
     }
 };

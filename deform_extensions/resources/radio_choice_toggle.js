@@ -1,10 +1,19 @@
 var ToggleManager = {
-    ui: {},
+    buildSelector: function(tag_name){
+        if (tag_name.indexOf(',') === -1) {
+            return `.item-${tag_name}`;
+        }
+        return tag_name.split(',').map(function(tag){
+            return `.item-${tag.trim()}`;
+        }).join(', ');
+    },
     showItem: function(tag_name){
-        $('.item-' + tag_name).show();
+        const selector = this.buildSelector(tag_name);
+        $(selector).show();
     },
     hideItem: function(tag_name){
-        $('.item-' + tag_name).hide();
+        const selector = this.buildSelector(tag_name);
+        $(selector).hide();
     },
     toggle: function(visible_target){
         /*
@@ -27,7 +36,9 @@ var ToggleManager = {
         this.toggle(target_name);
     },
     bindEvents: function(){
-        this.ui.field.on('change', this.onChange.bind(this));
+        this.ui.field
+            .off('change.radioChoiceToggle')
+            .on('change.radioChoiceToggle', this.onChange.bind(this));
     },
     initializeVisible: function(){
         /*
@@ -41,9 +52,9 @@ var ToggleManager = {
         this.toggle(visible_target);
     },
     setup: function(field_id){
-        this.ui.field = $('input[name=' + field_id + ']');
-        this.ui.form = this.ui.field.closest('form');
-        this.bindEvents();
-        this.initializeVisible();
+        var instance = Object.create(this);
+        instance.ui = { field: $('input[name=' + field_id + ']') };
+        instance.bindEvents();
+        instance.initializeVisible();
     }
 };
